@@ -21,6 +21,63 @@ Start		lda #$80
 		jsr LcdCePulse
 		lda #$88
 		jsr LcdCePulse
+; E
+		lda #$68
+		jsr LcdCePulse
+		lda #$58
+		jsr LcdCePulse
+; L
+		lda #$68
+		jsr LcdCePulse
+		lda #$C8
+		jsr LcdCePulse
+; L
+		lda #$68
+		jsr LcdCePulse
+		lda #$C8
+		jsr LcdCePulse
+; O
+		lda #$68
+		jsr LcdCePulse
+		lda #$F8
+		jsr LcdCePulse
+; ,
+		lda #$28
+		jsr LcdCePulse
+		lda #$C8
+		jsr LcdCePulse
+
+; Set Address to position on line 2.
+		lda #$C0
+		jsr LcdCePulse
+		lda #$50
+		jsr LcdCePulse
+
+; 6
+		lda #$38
+		jsr LcdCePulse
+		lda #$68
+		jsr LcdCePulse
+; 5
+		lda #$38
+		jsr LcdCePulse
+		lda #$58
+		jsr LcdCePulse
+; 0
+		lda #$38
+		jsr LcdCePulse
+		lda #$08
+		jsr LcdCePulse
+; 2
+		lda #$38
+		jsr LcdCePulse
+		lda #$28
+		jsr LcdCePulse
+; !
+		lda #$28
+		jsr LcdCePulse
+		lda #$18
+		jsr LcdCePulse
 
 		jmp Delay
 		jmp Start

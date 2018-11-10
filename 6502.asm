@@ -22,35 +22,46 @@ Start		lda #$80
 		lda #$88
 		jsr LcdCePulse
 
+		jmp Delay
 		jmp Start
 
-; TODO: Delay will need to be longer with oscillator.
-; 5ms target
-
-Delay		ldx #$02
-DelayLoop	dex
-		bne DelayLoop
+Delay		ldx #$FF
+DelayLoop1	ldy #$FF
+DelayLoop2	dey
+		bne DelayLoop2
+		dex
+		bne DelayLoop1
 		rts
 
-; Send low pulse to LCD enable pin.
+DelayShort	ldx #$FF
+DelayLoopShort1	dex
+		bne DelayLoopShort1
+		rts
+
+; Send high pulse to LCD enable pin.
 ; Reserve $0000 and $0001 for LCD.
 
 LcdCePulse	sta $01
-		jsr Delay
+		jsr DelayShort
 		sta $00
-		jsr Delay
+		jsr DelayShort
 		sta $01
 		jsr Delay
 		rts
 
-InitLcd		lda #$30		; 00110000 - data 0011, RS 0
+InitLcd		jsr Delay
+
+		lda #$30		; 00110000 - data 0011, RS 0
 		jsr LcdCePulse
+		jsr Delay
 		lda #$30
 		jsr LcdCePulse
+		jsr Delay
 		lda #$30
 		jsr LcdCePulse
 		lda #$20
 		jsr LcdCePulse
+		jsr DelayShort
 
 ; Set 8 bit, 2 line, 5x8.
 		lda #$20
@@ -69,6 +80,7 @@ InitLcd		lda #$30		; 00110000 - data 0011, RS 0
 		jsr LcdCePulse
 		lda #$10
 		jsr LcdCePulse
+		jsr Delay
 
 ; Entry mode.
 		lda #$00

@@ -1,5 +1,9 @@
 ;;;;
 ; Test LCD character display on custom 6502 computer.
+;
+; Reserved memory:
+; $0000 - LCD enable
+; $0001 - LCD disable
 ;;;;
 
 		processor 6502
@@ -79,8 +83,7 @@ Start		lda #$80
 		lda #$18
 		jsr LcdCePulse
 
-		jmp Delay
-		jmp Start
+Idle		jmp Idle
 
 Delay		ldx #$FF
 DelayLoop1	ldy #$FF
@@ -90,22 +93,21 @@ DelayLoop2	dey
 		bne DelayLoop1
 		rts
 
-DelayShort	ldx #$FF
-DelayLoopShort1	dex
-		bne DelayLoopShort1
+DelayShort	ldx #$80
+DelayShortLoop1	dex
+		bne DelayShortLoop1
 		rts
 
 ; Send high pulse to LCD enable pin.
-; Reserve $0000 and $0001 for LCD.
-
 LcdCePulse	sta $01
 		jsr DelayShort
 		sta $00
 		jsr DelayShort
 		sta $01
-		jsr Delay
+		jsr DelayShort
 		rts
 
+; LCD initialization sequence.
 InitLcd		jsr Delay
 
 		lda #$30		; 00110000 - data 0011, RS 0

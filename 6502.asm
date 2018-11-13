@@ -23,9 +23,9 @@
 		lda #$88
 		sta $7FC1
 		lda #$48
-		sta $7FC4
+		sta $7FC2
 		lda #$88
-		sta $7FC5
+		sta $7FC3
 
 		lda #$38
 		sta $7FE0
@@ -134,7 +134,7 @@ Line1Loop	lda $7FC0,x
 		jsr LcdCePulse
 		inx
 		cpx #$20
-		bne Line1Loop
+		bcc Line1Loop
 
 		lda #$C0		; Line 2 : 1100 (line2) 0000 (RS 0)
  		jsr LcdCePulse
@@ -146,20 +146,23 @@ Line2Loop	lda $7FE0,x
 		jsr LcdCePulse
 		inx
 		cpx #$20
-		bne Line2Loop
+		bcc Line2Loop
 
 		rts
 
 ;;;
-; Zero out LCD reserved RAM.
+; Zero out LCD reserved RAM (set all positions to space character).
 ;;;
 
-ZeroLCDRam	lda #$28		; Set all characters to "space".
-		ldx #$00
-ZeroLoop	sta $7FC0,x
+ZeroLCDRam	ldx #$00
+ZeroLoop	lda #$28
+		sta $7FC0,x
+		inx
+		lda #$08
+		sta $7FC0,x
 		inx
 		cpx #$40
-		bne ZeroLoop
+		bcc ZeroLoop
 
 		rts
 

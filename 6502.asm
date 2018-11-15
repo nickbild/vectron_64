@@ -22,19 +22,57 @@
 		sta $7FC0
 		lda #$88
 		sta $7FC1
-		lda #$48
+		
+		lda #$68
 		sta $7FC2
-		lda #$88
+		lda #$58
 		sta $7FC3
+
+		lda #$68
+		sta $7FC4
+		lda #$C8
+		sta $7FC5
+
+		lda #$68
+		sta $7FC6
+		lda #$C8
+		sta $7FC7
+
+		lda #$68
+		sta $7FC8
+		lda #$F8
+		sta $7FC9
+
+		lda #$28
+		sta $7FCA
+		lda #$C8
+		sta $7FCB
+
 
 		lda #$38
 		sta $7FE0
 		lda #$68
 		sta $7FE1
+		
+		lda #$38
+		sta $7FE2
+		lda #$58
+		sta $7FE3
+
 		lda #$38
 		sta $7FE4
-		lda #$68
+		lda #$08
 		sta $7FE5
+
+		lda #$38
+		sta $7FE6
+		lda #$28
+		sta $7FE7
+
+		lda #$28
+		sta $7FE8
+		lda #$18
+		sta $7FE9
 
 ; Write to LCD.
 
@@ -129,11 +167,11 @@ WriteLCD	lda #$80		; Line 1 : 1000 (line1) 0000 (RS 0)
 		lda #$00		; Position 0 : 0000 (position 0) 0000 (RS 0)
 		jsr LcdCePulse
 
-		ldx #$00
-Line1Loop	lda $7FC0,x
+		ldy #$00
+Line1Loop	lda $7FC0,y
 		jsr LcdCePulse
-		inx
-		cpx #$20
+		iny
+		cpy #$20
 		bcc Line1Loop
 
 		lda #$C0		; Line 2 : 1100 (line2) 0000 (RS 0)
@@ -141,11 +179,11 @@ Line1Loop	lda $7FC0,x
 		lda #$00		; Position 0 : 0000 (position 0) 0000 (RS 0)
 		jsr LcdCePulse
 
-		ldx #$00
-Line2Loop	lda $7FE0,x
+		ldy #$00
+Line2Loop	lda $7FE0,y
 		jsr LcdCePulse
-		inx
-		cpx #$20
+		iny
+		cpy #$20
 		bcc Line2Loop
 
 		rts

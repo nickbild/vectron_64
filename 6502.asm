@@ -1,84 +1,38 @@
 ;;;;
-; Test LCD character display on custom 6502 computer.
+; Operating system for a custom 6502 computer.
+; Nick Bild - nick.bild@gmail.com
 ;
 ; Reserved memory:
 ; $0000 - LCD enable
 ; $0001 - LCD disable
 ; $7FC0-$7FFF - Data to write to LCD.
+;
+; $FFF8 - Clock keyboard shift register and enable line buffer.
+; $FFF9 - Reset binary counter (PS/2 keyboard packets).
+;
+; $FFFA - NMI IRQ Vector
+; $FFFB - NMI IRQ Vector
+; $FFFC - Reset Vector
+; $FFFD - Reset Vector
+; $FFFE - IRQ Vector
+; $FFFF - IRQ Vector
 ;;;;
 
 		processor 6502
 
 ; Start at beginning of ROM.
 
-		ORG $8000
+StartExe	ORG $8000
 
 		jsr InitLcd
 		jsr ZeroLCDRam
 
-; Load memory with contents to write to LCD.
-
-		lda #$48
-		sta $7FC0
-		lda #$88
-		sta $7FC1
+; Discard keyboard initialization sequence, then enable interrupts.
+		jsr SkipKeyboardInit
+		cli
 		
-		lda #$68
-		sta $7FC2
-		lda #$58
-		sta $7FC3
-
-		lda #$68
-		sta $7FC4
-		lda #$C8
-		sta $7FC5
-
-		lda #$68
-		sta $7FC6
-		lda #$C8
-		sta $7FC7
-
-		lda #$68
-		sta $7FC8
-		lda #$F8
-		sta $7FC9
-
-		lda #$28
-		sta $7FCA
-		lda #$C8
-		sta $7FCB
-
-
-		lda #$38
-		sta $7FE0
-		lda #$68
-		sta $7FE1
-		
-		lda #$38
-		sta $7FE2
-		lda #$58
-		sta $7FE3
-
-		lda #$38
-		sta $7FE4
-		lda #$08
-		sta $7FE5
-
-		lda #$38
-		sta $7FE6
-		lda #$28
-		sta $7FE7
-
-		lda #$28
-		sta $7FE8
-		lda #$18
-		sta $7FE9
-
-; Write to LCD.
-
-		jsr WriteLCD
-
-Idle		jmp Idle
+MainLoop	jsr WriteLCD
+		jmp MainLoop
 
 ;;;
 ; Long Delay
@@ -203,4 +157,59 @@ ZeroLoop	lda #$28
 		bcc ZeroLoop
 
 		rts
+
+;;;
+; Reset binary counter tracking receipt of complete packets from keyboard.
+;;;
+
+ResetKeyboardCounter
+		lda $0001
+		lda $FFF9
+		lda $0001
+
+		rts
+
+;;;
+; Read in all of the initialization data from the keyboard and discard it.
+;;;
+
+SkipKeyboardInit
+		ldy #$00
+KBInitLoop	jsr ResetKeyboardCounter
+		jsr DelayShort
+		iny
+		cpy #$20
+		bcc KBInitLoop
+
+		rts
+
+;;;
+; Keyboard Interrupt Service Routine.
+;;;
+
+KbIsr
+		pha
+
+		; Display shift register contents on output pins,
+		; and enable line buffer.
+		lda $FFF8
+		lda $0001
+		lda $FFF8
+
+		; Store data in memory location read by LCD.
+		; F = 0010 1011, LCD interprets as double quote.
+		sta $7FC0
+		sta $7FC1
+
+		; Finished ISR, reset binary counter.
+		jsr ResetKeyboardCounter
+
+		pla
+
+		rti
+
+; Store the location of key program sections.
+		ORG $FFFC
+RSTVEC: .word StartExe		; Start of execution.
+IRQVEC: .word KbIsr		; Interrupt service routine.
 

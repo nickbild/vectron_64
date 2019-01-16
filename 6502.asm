@@ -31,7 +31,7 @@ StartExe	ORG $8000
 		jsr SkipKeyboardInit
 		cli
 		
-MainLoop	jsr WriteLCD
+MainLoop	;jsr WriteLCD
 		jmp MainLoop
 
 ;;;
@@ -196,13 +196,40 @@ KbIsr
 		lda $0001
 		lda $FFF8
 
+		cmp #$F0
+		beq SkipScanCode
+
 		; Store data in memory location read by LCD.
 		; F = 0010 1011, LCD interprets as double quote.
 		sta $7FC0
 		sta $7FC1
+		sta $7FC2
+		sta $7FC3
+
+		; Make sure RS (bit 3) is set to 1.
+		lda #$0F
+		ora $7FC0
+		sta $7FC0
+		sta $7FC1
+
+		; Move least sig. nibble to most sig. position, then make sure RS is 1.
+		rol $7FC2
+		rol $7FC2
+		rol $7FC2
+		rol $7FC2
+		lda #$0F
+		ora $7FC2
+		sta $7FC2
+		sta $7FC3
+
+		jsr WriteLCD
 
 		; Finished ISR, reset binary counter.
-		jsr ResetKeyboardCounter
+SkipScanCode	;jsr ResetKeyboardCounter
+		lda $FFF9	; First rest lifts KB pause, so clocks counter to 1 on high signal.
+		lda $0001
+		lda $FFF9	; KB no longer paused, so set counter to 0.
+		lda $0001
 
 		pla
 

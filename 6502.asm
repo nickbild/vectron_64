@@ -5,6 +5,7 @@
 ; Reserved memory:
 ; $0000 - LCD enable
 ; $0001 - LCD disable
+; $0100-$01FF - 6502 stack
 ; $7FC0-$7FFF - Data to write to LCD.
 ;
 ; $FFF8 - Clock keyboard shift register and enable line buffer.
@@ -24,11 +25,15 @@
 
 StartExe	ORG $8000
 
+		sei
+
 		jsr InitLcd
 		jsr ZeroLCDRam
 
 ; Discard keyboard initialization sequence, then enable interrupts.
-		jsr SkipKeyboardInit
+		;jsr SkipKeyboardInit
+		jsr Delay
+		jsr ResetKeyboardCounter
 		cli
 		
 MainLoop	;jsr WriteLCD
@@ -193,9 +198,7 @@ KbIsr
 		; Display shift register contents on output pins,
 		; and enable line buffer.
 		lda $FFF8
-		lda $0001
-		lda $FFF8
-
+		
 		cmp #$F0
 		beq SkipScanCode
 
@@ -226,9 +229,7 @@ KbIsr
 
 		; Finished ISR, reset binary counter.
 SkipScanCode	;jsr ResetKeyboardCounter
-		lda $FFF9	; First rest lifts KB pause, so clocks counter to 1 on high signal.
-		lda $0001
-		lda $FFF9	; KB no longer paused, so set counter to 0.
+		lda $FFF9
 		lda $0001
 
 		pla

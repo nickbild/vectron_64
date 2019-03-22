@@ -275,44 +275,48 @@ KBInitLoop	jsr ResetKeyboardCounter
 
 KbIsr
 		pha
+		.byte #$DA ; phx - mnemonic unknown to DASM.
 
 		; Display shift register contents on output pins,
 		; and enable line buffer.
+		; Read shift register contents into accumulator.
 		lda $FFF8
 
+		; Skip key up scan codes.
 		cmp #$F0
 		beq SkipScanCode
 
+		; Convert scan code into LCD code.
+		sbc #$15
+		tax
+		lda ScanCodeLookup,x
+
 		; Store data in memory location read by LCD.
-		; F = 0010 1011, LCD interprets as double quote.
 		sta $7FC0
 		sta $7FC1
-		sta $7FC2
-		sta $7FC3
 
 		; Make sure RS (bit 3) is set to 1.
 		lda #$0F
 		ora $7FC0
 		sta $7FC0
-		sta $7FC1
 
 		; Move least sig. nibble to most sig. position, then make sure RS is 1.
-		rol $7FC2
-		rol $7FC2
-		rol $7FC2
-		rol $7FC2
+		rol $7FC1
+		rol $7FC1
+		rol $7FC1
+		rol $7FC1
 		lda #$0F
-		ora $7FC2
-		sta $7FC2
-		sta $7FC3
+		ora $7FC1
+		sta $7FC1
 
 		jsr WriteLCD
 
 		; Finished ISR, reset binary counter.
-SkipScanCode	;jsr ResetKeyboardCounter
+SkipScanCode
 		lda $FFF9
 		lda $0001
 
+		.byte #$FA ; plx
 		pla
 
 		rti

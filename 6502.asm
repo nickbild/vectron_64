@@ -8,7 +8,7 @@
 ; $0001 - Unused -- read it to disable any IC (except RAM).
 ; $0100-$01FF - 6502 stack
 ; $7FC0-$7FFF - Data to write to LCD.
-;								Each character (16 x 2 lines) is represented by
+;               Each character (16 x 2 lines) is represented by
 ;               2 consecutive bytes (4-bit mode).
 ;               Most sig. 4 bits are for LCD data.
 ;               Least sig. 4 bits - only bit 3 used (tied to RS pin).

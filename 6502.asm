@@ -1,21 +1,26 @@
 ;;;;
 ; Operating system for a custom 6502 computer.
 ; Nick Bild - nick.bild@gmail.com
+; https://github.com/nickbild/6502_os
 ;
 ; Reserved memory:
 ; $0000 - LCD enable
-; $0001 - LCD disable
+; $0001 - Unused -- read it to disable any IC (except RAM).
 ; $0100-$01FF - 6502 stack
 ; $7FC0-$7FFF - Data to write to LCD.
+;								Each character (16 x 2 lines) is represented by
+;               2 consecutive bytes (4-bit mode).
+;               Most sig. 4 bits are for LCD data.
+;               Least sig. 4 bits - only bit 3 used (tied to RS pin).
 ;
 ; $FFF8 - Clock keyboard shift register and enable line buffer.
-; $FFF9 - Reset binary counter (PS/2 keyboard packets).
+; $FFF9 - Reset binary counter (counts bits received from PS/2 keyboard packets).
 ;
 ; $FFFA - NMI IRQ Vector
 ; $FFFB - NMI IRQ Vector
-; $FFFC - Reset Vector
+; $FFFC - Reset Vector - Stores start address of this ROM.
 ; $FFFD - Reset Vector
-; $FFFE - IRQ Vector
+; $FFFE - IRQ Vector - Keyboard ISR address.
 ; $FFFF - IRQ Vector
 ;;;;
 
@@ -35,7 +40,7 @@ StartExe	ORG $8000
 		jsr Delay
 		jsr ResetKeyboardCounter
 		cli
-		
+
 MainLoop	;jsr WriteLCD
 		jmp MainLoop
 
@@ -198,7 +203,7 @@ KbIsr
 		; Display shift register contents on output pins,
 		; and enable line buffer.
 		lda $FFF8
-		
+
 		cmp #$F0
 		beq SkipScanCode
 
@@ -240,4 +245,3 @@ SkipScanCode	;jsr ResetKeyboardCounter
 		ORG $FFFC
 RSTVEC: .word StartExe		; Start of execution.
 IRQVEC: .word KbIsr		; Interrupt service routine.
-

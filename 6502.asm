@@ -32,14 +32,11 @@ StartExe	ORG $8000
 
 		jsr InitLcd
 		jsr ZeroLCDRam
-
-; Discard keyboard initialization sequence, then enable interrupts.
-		;jsr SkipKeyboardInit
-		jsr Delay
 		jsr ResetKeyboardCounter
+
 		cli
 
-MainLoop	;jsr WriteLCD
+MainLoop
 		jmp MainLoop
 
 ;;;

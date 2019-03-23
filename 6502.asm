@@ -227,9 +227,9 @@ KbIsr
 		lda #$0F
 		ora $7FBE
 
-		; If CursorPosition >= 32, reset it to 0.
+		; If CursorPosition >= 64, reset it to 0.
 		ldx CursorPosition
-		cpx #$20
+		cpx #$40
 		bcc CursorPositionLessThan32
 		ldx #$00
 		stx CursorPosition
@@ -271,74 +271,74 @@ SkipScanCode
 ScanCodeLookup
 		.byte #$51	; Q
 		.byte #$31	; 1
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$5A	; Z
 		.byte #$53	; S
 		.byte #$41	; A
 		.byte #$57	; W
 		.byte #$32	; 2
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$43	; C
 		.byte #$58	; X
 		.byte #$44	; D
 		.byte #$45	; E
 		.byte #$34	; 4
 		.byte #$33	; 3
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; <space>
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; <space>
 		.byte #$56	; V
 		.byte #$46	; F
 		.byte #$54	; T
 		.byte #$52	; R
 		.byte #$35	; 5
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$4E	; N
 		.byte #$42	; B
 		.byte #$48	; H
 		.byte #$47	; G
 		.byte #$59	; Y
 		.byte #$36	; 6
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$4d	; M
 		.byte #$4a	; J
 		.byte #$55	; U
 		.byte #$37	; 7
 		.byte #$38	; 8
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$2C	; ,
 		.byte #$4B	; K
 		.byte #$49	; I
 		.byte #$4F	; O
 		.byte #$30	; 0
 		.byte #$39	; 9
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$2E	; .
 		.byte #$2F	; /
 		.byte #$4C	; L
 		.byte #$3B	; ;
 		.byte #$50	; P
 		.byte #$2D	; -
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
 		.byte #$27	; '
-		.byte #$00	; unused
+		.byte #$20	; unused
 		.byte #$5B	; [
 		.byte #$3D	; =
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; unused
-		.byte #$00	; <enter>
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; unused
+		.byte #$20	; <enter>
 
 ; Store the location of key program sections.
 		ORG $FFFC

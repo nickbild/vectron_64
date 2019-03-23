@@ -209,7 +209,7 @@ KbIsr
 		beq SkipScanCode
 
 		; Convert scan code into LCD code.
-		sbc #$15
+		sbc #$14
 		tax
 		lda ScanCodeLookup,x
 
@@ -244,7 +244,7 @@ SkipScanCode
 		rti
 
 ; PS/2 Code Set 2 Scan Code Lookup Table
-; Subtract $15 from scan code to determine
+; Subtract $14 from scan code to determine
 ; byte offset into this table.
 ; Value at lookup location is character
 ; LCD data corresponding to scan code.

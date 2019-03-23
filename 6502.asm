@@ -6,7 +6,9 @@
 ; Reserved memory:
 ; $0000 - LCD enable
 ; $0001 - Unused -- read it to disable any IC (except RAM).
+; $0002 - Current LCD cursor position.
 ; $0100-$01FF - 6502 stack
+; $7FBE-$7FBF - Temporary location for LCD data manipulation.
 ; $7FC0-$7FFF - Data to write to LCD.
 ;               Each character (16 x 2 lines) is represented by
 ;               2 consecutive bytes (4-bit mode).
@@ -26,6 +28,9 @@
 
 		processor 6502
 
+CursorPosition	ORG $0002
+		.byte #$00
+
 ; Start at beginning of ROM.
 StartExe	ORG $8000
 		sei
@@ -33,6 +38,10 @@ StartExe	ORG $8000
 		jsr InitLcd
 		jsr ZeroLCDRam
 		jsr ResetKeyboardCounter
+
+		; Initialize LCD cursor position to 0.
+		lda #$00
+		sta CursorPosition
 
 		cli
 
@@ -211,22 +220,36 @@ KbIsr
 		lda ScanCodeLookup,x
 
 		; Store data in memory location read by LCD.
-		sta $7FC0
-		sta $7FC1
+		sta $7FBE
+		sta $7FBF
 
 		; Make sure RS (bit 3) is set to 1.
 		lda #$0F
-		ora $7FC0
-		sta $7FC0
+		ora $7FBE
+
+		; If CursorPosition >= 32, reset it to 0.
+		ldx CursorPosition
+		cpx #$20
+		bcc CursorPositionLessThan32
+		ldx #$00
+		stx CursorPosition
+CursorPositionLessThan32
+
+		ldx CursorPosition
+		sta $7FC0,x
+		inc CursorPosition
 
 		; Move least sig. nibble to most sig. position, then make sure RS is 1.
-		rol $7FC1
-		rol $7FC1
-		rol $7FC1
-		rol $7FC1
+		rol $7FBF
+		rol $7FBF
+		rol $7FBF
+		rol $7FBF
 		lda #$0F
-		ora $7FC1
-		sta $7FC1
+		ora $7FBF
+
+		ldx CursorPosition
+		sta $7FC0,x
+		inc CursorPosition
 
 		jsr WriteLCD
 

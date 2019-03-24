@@ -28,7 +28,10 @@
 
 		processor 6502
 
-CursorPosition	ORG $0002
+; Named variables in RAM.
+		ORG $0002
+
+CursorPosition
 		.byte #$00
 
 ; Start at beginning of ROM.

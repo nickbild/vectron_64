@@ -1,6 +1,6 @@
-# Operating System for Custom 6502 Computer
+# Vectron 64
 
-Work in progress.
+Custom built [6502](https://en.wikipedia.org/wiki/MOS_Technology_6502)-based computer and operating system.
 
 ## Specs
 

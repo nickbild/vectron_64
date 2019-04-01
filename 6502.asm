@@ -7,6 +7,7 @@
 ; $0000 - LCD enable
 ; $0001 - Unused -- read it to disable any IC (except RAM).
 ; $0002 - Current LCD cursor position.
+; $0003 - Flag to indicate if next scan code should be skipped.
 ; $0100-$01FF - 6502 stack
 ; $7FBE-$7FBF - Temporary location for LCD data manipulation.
 ; $7FC0-$7FFF - Data to write to LCD.
@@ -33,6 +34,8 @@
 
 CursorPosition
 		.byte #$00
+SkipNextScanCodeFlag
+		.byte #$00
 
 ; Start at beginning of ROM.
 StartExe	ORG $8000
@@ -45,6 +48,10 @@ StartExe	ORG $8000
 		; Initialize LCD cursor position to 0.
 		lda #$00
 		sta CursorPosition
+
+		; Do not skip the first scan code.
+		lda #$00
+		sta SkipNextScanCodeFlag
 
 		cli
 
@@ -208,14 +215,25 @@ KbIsr
 		pha
 		.byte #$DA ; phx - mnemonic unknown to DASM.
 
+		; Is this scan code flagged to be skipped?
+		ldx SkipNextScanCodeFlag
+		cpx #$01
+		beq SkipScanCodeAndResetSkip
+
 		; Display shift register contents on output pins,
 		; and enable line buffer.
 		; Read shift register contents into accumulator.
 		lda $FFF8
 
 		; Skip key up scan codes.
+		; Remeber to skip the next scan code after them.
 		cmp #$F0
-		beq SkipScanCode
+		bne DoNotSkipScanCode
+		ldx #$01
+		stx SkipNextScanCodeFlag
+		jmp SkipScanCode
+
+DoNotSkipScanCode
 
 		; Convert scan code into LCD code.
 		sbc #$14
@@ -255,6 +273,11 @@ CursorPositionLessThan32
 		inc CursorPosition
 
 		jsr WriteLCD
+
+SkipScanCodeAndResetSkip
+		; Do not skip the next scan code.
+		ldx #$00
+		stx SkipNextScanCodeFlag
 
 		; Finished ISR, reset binary counter.
 SkipScanCode

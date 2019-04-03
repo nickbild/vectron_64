@@ -1,4 +1,6 @@
-![Logo](https://raw.githubusercontent.com/nickbild/6502_os/master/img/vectron_logo_small.png)
+<p align="center">
+<img src="https://raw.githubusercontent.com/nickbild/6502_os/master/img/vectron_logo_small.png">
+</p>
 
 # Vectron 64
 

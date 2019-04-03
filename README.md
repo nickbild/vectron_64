@@ -1,3 +1,5 @@
+![Logo](https://raw.githubusercontent.com/nickbild/6502_os/master/img/vectron_logo_small.png)
+
 # Vectron 64
 
 Custom built general purpose, programmable, [6502](https://en.wikipedia.org/wiki/MOS_Technology_6502)-based computer and operating system.

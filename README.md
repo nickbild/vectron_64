@@ -36,25 +36,23 @@ To program ROM, slide all switches to the left.  Connect a microcontroller dev b
 
 ## Reserved Memory
 
-$0000 - LCD enable
-$0001 - Unused -- read it to disable any IC (except RAM).
-$0002 - Current LCD cursor position.
-$0003 - Flag to indicate if next scan code should be skipped.
-$0100-$01FF - 6502 stack
-$7FBE-$7FBF - Temporary location for LCD data manipulation.
-$7FC0-$7FFF - Data to write to LCD.
-              Each character (16 x 2 lines) is represented by
-              2 consecutive bytes (4-bit mode).
-              Most sig. 4 bits are for LCD data.
-              Least sig. 4 bits - only bit 3 used (tied to RS pin).
-$FFF8 - Clock keyboard shift register and enable line buffer.
-$FFF9 - Reset binary counter (counts bits received from PS/2 keyboard packets).
-$FFFA - NMI IRQ Vector
-$FFFB - NMI IRQ Vector
-$FFFC - Reset Vector - Stores start address of this ROM.
-$FFFD - Reset Vector
-$FFFE - IRQ Vector - Keyboard ISR address.
-$FFFF - IRQ Vector
+| Address | Use |
+| ------- | --- |
+| $0000 | LCD enable |
+| $0001 | Unused -- read it to disable any IC (except RAM). |
+| $0002 | Current LCD cursor position. |
+| $0003 | Flag to indicate if next scan code should be skipped. |
+| $0100-$01FF | 6502 stack |
+| $7FBE-$7FBF | Temporary location for LCD data manipulation. |
+| $7FC0-$7FFF | Data to write to LCD. Each character (16 x 2 lines) is represented by 2 consecutive bytes (4-bit mode). Most sig. 4 bits are for LCD data. Least sig. 4 bits - only bit 3 used (tied to RS pin). |
+| $FFF8 | Clock keyboard shift register and enable line buffer. |
+| $FFF9 | Reset binary counter (counts bits received from PS/2 keyboard packets). |
+| $FFFA | NMI IRQ Vector |
+| $FFFB | NMI IRQ Vector |
+| $FFFC | Reset Vector - Stores start address of this ROM. |
+| $FFFD | Reset Vector |
+| $FFFE | IRQ Vector - Keyboard ISR address. |
+| $FFFF | IRQ Vector |
 
 ## Bill of Materials
 

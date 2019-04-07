@@ -20,7 +20,7 @@ Custom-built general purpose, programmable, [6502](https://en.wikipedia.org/wiki
 
 [Fritzing Schematics](https://raw.githubusercontent.com/nickbild/6502_os/master/schematics/6502_computer.fzz)
 
-[Schematics Image](https://raw.githubusercontent.com/nickbild/6502_os/master/schematics/6502_computer_bb.png)
+![Schematics Image](https://raw.githubusercontent.com/nickbild/6502_os/master/schematics/6502_computer_bb.png)
 
 ## Images
 
@@ -36,7 +36,8 @@ To program ROM, slide all switches to the left.  Connect a microcontroller dev b
 
 ## Bill of Materials
 
-| Quantity	| Part Type	| Properties |
+| Quantity | Part Type | Properties |
+| -------- | --------- | ---------- |
 | 11	| Ceramic Capacitor	| package 200 mil [THT, multilayer]; voltage 6.3V; capacitance 0.1µF |
 | 9	| Electrolytic Capacitor | package 100 mil [THT, electrolytic]; voltage 6.3V; capacitance 220µF |
 | 1	| Electrolytic Capacitor | package 100 mil [THT, electrolytic]; voltage 6.3V; capacitance 47µF |

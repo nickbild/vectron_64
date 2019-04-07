@@ -30,7 +30,7 @@ Custom-built general purpose, programmable, [6502](https://en.wikipedia.org/wiki
 
 ## Operation
 
-All slide switches must be switched to the right for normal operating mode.  Connect a 9V DC power supply and the computer will being running the program stored in ROM.
+All slide switches must be switched to the right for normal operating mode.  Connect a 9V DC power supply and the computer will begin running the program stored in ROM.
 
 To program ROM, slide all switches to the left.  Connect a microcontroller dev board (Arduino-like) per wiring guidance in the schematics.  Code to perform the programming routine is available in my [EEPROM Burner](https://github.com/nickbild/eeprom_burner) repository.
 

@@ -34,6 +34,14 @@ All slide switches must be switched to the right for normal operating mode.  Con
 
 To program ROM, slide all switches to the left.  Connect a microcontroller dev board (Arduino-like) per wiring guidance in the schematics.  Code to perform the programming routine is available in my [EEPROM Burner](https://github.com/nickbild/eeprom_burner) repository.
 
+A small utility, `hex.py`, has been provided to generate the calls to the `write` function that are required (in [EEPROM Burner](https://github.com/nickbild/eeprom_burner)) to transfer your binary to the ROM.  Create a text file named `hex.txt` with hex codes, one byte per line, then run:
+
+```
+python hex.py
+```
+
+The included ROM image, [6502.asm](https://raw.githubusercontent.com/nickbild/6502_os/master/6502.asm), will capture keyboard input and display it on the LCD screen.  This serves as a good template from which to build more complex applications.
+
 ## Reserved Memory
 
 | Address | Use |

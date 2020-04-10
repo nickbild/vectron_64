@@ -1,0 +1,13 @@
+- Assemble to source:
+dasm 6502.asm -l6502.list
+
+- Use text editor to copy/manipulate listing to get sequential list of bytes (1 per line).
+  - Copy addresses starting from $8000. Do not include IRQ or Reset vectors.
+  - Name it "hex.txt".
+
+- Prepare microcontroller code:
+python hex.py
+
+- Copy writes into EEPROM burner Arduino code (https://github.com/nickbild/eeprom_burner).
+  - Make sure to set program start address (in $FFFC-$FFFD) and, if needed, IRQ (in $FFFE-$FFFF).
+    - These addresses are found at the end of the listing.
